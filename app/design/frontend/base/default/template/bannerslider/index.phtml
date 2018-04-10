@@ -1,0 +1,75 @@
+<?php
+/**
+ * SolutionExcel BannerSlider Module.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the SolutionExcel Team
+ * that is bundled with this package of SolutionExcel Inc.
+ * This package developed for Magento COMMUNITY edition.
+ * =================================================================
+ *
+ * @category    SolutionExcel
+ * @package     SolutionExcel_BannerSlider
+ * @copyright   Copyright (c) 2016 SolutionExcel (http://www.solutionexcel.com/)
+ *
+ */
+ 
+	$helper = Mage::helper('bannerslider'); 
+	if($helper->isEnable()):
+		//echo $isCaptions = $helper->isCaptions();
+?>
+<script>
+jQuery(document).ready(function(){
+	jQuery('#bannerSlider').bxSlider({
+		responsive: <?php echo $helper->isResponsive(); ?>,
+		mode: '<?php echo $helper->getSliderMode(); ?>',
+		speed: <?php echo $helper->getSliderSpeed(); ?>,
+		auto: <?php echo $helper->isAuto(); ?>,
+		pause: <?php echo $helper->getAutoPause(); ?>,
+		autoHover: <?php echo $helper->isAutoHover(); ?>,
+		pager: <?php echo $helper->isPager(); ?>,
+		controls: <?php echo $helper->isControls(); ?>,
+		captions: <?php echo $helper->isCaptions(); ?>,
+	});
+});
+</script>
+
+	<?php
+		$banners = $this->getBanners();
+		if($banners->getSize() > 0):
+			$mediaUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+	?>
+
+<div class="home-page-banner">
+	<ul id="bannerSlider" class="bxslider">
+	<?php 
+		$i=0;
+		foreach($banners as $banner){ $i++;?>
+    		<li id="slide-<?php echo $i;?>" class="slide">
+            	<?php if($helper->isCaptions()=='false' && $banner->getUrl()): ?>
+                	<a href="<?php echo $banner->getUrl();?>" title="<?php echo $banner->getTitle();?>">
+                <?php endif; ?>
+            		
+                    <img src="<?php echo $mediaUrl.$banner->getFilename();?>" alt="<?php echo $banner->getTitle();?>" />
+                
+				<?php if($helper->isCaptions()=='false' && $banner->getUrl()): ?>
+                	</a>
+                <?php endif; ?>
+                
+				<?php if($helper->isCaptions()=='true'): ?>
+                <div class="slider-caption">
+                	<h1><?php echo $banner->getTitle();?></h1>
+                    <p><?php echo $banner->getDescription();?></p>
+                    <?php if($banner->getUrl()): ?>
+                    	<button onclick="setLocation('<?php echo $banner->getUrl();?>')" class="button btn-readmore" title="<?php echo $this->__('Read More');?>" type="button"><span><span><?php echo $this->__('Read More');?></span></span></button>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+                
+            </li>
+    <?php } ?>
+    </ul>
+</div>
+<?php endif; ?>
+<?php endif; ?>
